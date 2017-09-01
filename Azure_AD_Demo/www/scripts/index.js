@@ -18,6 +18,34 @@
         var receivedElement = parentElement.querySelector('.received');
         listeningElement.setAttribute('style', 'display:none;');
         receivedElement.setAttribute('style', 'display:block;');
+
+        var authority = "https://login.microsoftonline.com/common",
+            redirectUri = "http://YouShopApp",
+            resourceUri = "https://graph.windows.net",
+            clientId = "3fa12371-5e2d-45e0-9e00-3564cb61566f",
+            graphApiVersion = "2013-11-08";
+
+        var AuthenticationContext = Microsoft.ADAL.AuthenticationContext;
+        window.setTimeout(function() {
+            AuthenticationContext.createAsync(authority)
+                .then(function(authContext) {
+                    authContext.aquireTokenAsync(
+                            resourceUri,
+                            clientId,
+                            redirectUri)
+                        .then(function(authResponse) {
+                                console.log("Token acuired: " + authResponse.accessToken);
+                                console.log("Token wil expire on: " + authResponse.expiresOn);
+                            },
+                            function(e) {
+                                console.log(e.message);
+
+                            });
+                }, function(e) {
+                    console.log(e.message);
+
+                });
+        }, 2000);
     };
 
     function onPause() {
